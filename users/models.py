@@ -7,6 +7,6 @@ from django.contrib.auth.models import AbstractUser
 # profileImg : 유저 프로필
 # followerNumber : 유저 팔로워 수
 class User(AbstractUser):
-    profileImg = models.URLField(blank=True)        # 이미지 링크를 첨부하기 위함
+    profileImg = models.URLField(blank=True)  # 이미지 링크를 첨부하기 위함
     profileIntroduce = models.CharField(max_length=150, default="")
     followerNumber = models.PositiveIntegerField(default=0)
