@@ -9,4 +9,4 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     profileImg = models.URLField(blank=True)  # 이미지 링크를 첨부하기 위함
     profileIntroduce = models.CharField(max_length=150, default="")
-    followerNumber = models.PositiveIntegerField(default=0)
+    followerNum = models.PositiveIntegerField(default=0)
