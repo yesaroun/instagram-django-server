@@ -23,3 +23,12 @@ class FeedDetailSerializer(ModelSerializer):
     class Meta:
         model = Feed
         fields = "__all__"
+
+
+class UserFeedsSerializer(ModelSerializer):
+    user = UserSerializer()
+    reviews = ReviewSerializer(many=True)
+
+    class Meta:
+        model = Feed
+        fields = "__all__"

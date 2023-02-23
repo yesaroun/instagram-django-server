@@ -2,8 +2,9 @@ from django.shortcuts import render
 from rest_framework.exceptions import NotFound
 
 from .models import Feed
+from users.models import User
 from rest_framework.views import APIView
-from .serializers import FeedSerializer, FeedDetailSerializer
+from .serializers import FeedSerializer, FeedDetailSerializer, UserFeedsSerializer
 from rest_framework.response import Response
 
 
@@ -32,4 +33,18 @@ class FeedDetail(APIView):
     def get(self, request, feed_id):
         feed = self.get_object(feed_id)
         serializer = FeedDetailSerializer(feed)
+        return Response(serializer.data)
+
+
+class UserFeeds(APIView):
+    def get_objects(self, username):
+        try:
+            user_id = User.objects.get(username=username).id
+            return Feed.objects.filter(user=user_id)
+        except Feed.DoesNotExist:
+            raise NotFound
+
+    def get(self, request, username):
+        feeds = self.get_objects(username)
+        serializer = UserFeedsSerializer(feeds, many=True)
         return Response(serializer.data)
