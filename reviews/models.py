@@ -7,7 +7,7 @@ from common.models import CommonModel
 # USER
 # FEED
 class Review(CommonModel):
-    caption = models.CharField(max_length=150)
+    rcaption = models.CharField(max_length=150)
 
     user = models.ForeignKey(
         "users.User", on_delete=models.CASCADE, related_name="reviews"
