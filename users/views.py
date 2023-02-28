@@ -1,4 +1,3 @@
-import jwt as jwt
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -8,6 +7,7 @@ from .serializers import UserSerializer
 from .models import User
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
+import jwt
 
 
 class MyInfo(APIView):
@@ -72,8 +72,8 @@ class JWTLogin(APIView):
     """jwt를 통한 로그인 처리"""
 
     def post(self, request):
-        username = request.data.gate("username")
-        password = request.data.gate("password")
+        username = request.data.get("username")
+        password = request.data.get("password")
 
         if not username or not password:
             raise ParseError
