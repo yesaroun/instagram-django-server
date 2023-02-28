@@ -1,10 +1,11 @@
 from rest_framework.permissions import IsAuthenticated
-
-from .serializers import UserSerializer
-from .models import User
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.exceptions import ParseError
+from rest_framework import status
+from .serializers import UserSerializer
+from .models import User
+from django.contrib.auth import authenticate, login
 
 
 class MyInfo(APIView):
@@ -31,3 +32,34 @@ class MyInfo(APIView):
         pass
 
     # def delete(self):  # Delete
+
+
+class Login(APIView):
+    """django의 seesion을 활용한 로그인"""
+
+    def post(self, request):
+        username = request.data.get("username")
+        password = request.data.get("password")
+
+        if not username or not password:
+            raise ParseError()
+
+        user = authenticate(
+            request,
+            username=username,
+            password=password,
+        )
+        print(user)
+
+        if user:
+            login(request, user)
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+
+class Logout(APIView):
+    """django의 session을 활용한 로그아웃"""
+
+    def post(self, request):
+        pass
