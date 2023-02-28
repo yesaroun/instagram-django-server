@@ -5,7 +5,7 @@ from rest_framework.exceptions import ParseError
 from rest_framework import status
 from .serializers import UserSerializer
 from .models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 
 class MyInfo(APIView):
@@ -62,4 +62,5 @@ class Logout(APIView):
     """django의 session을 활용한 로그아웃"""
 
     def post(self, request):
-        pass
+        logout(request)
+        return Response(status=status.HTTP_200_OK)
