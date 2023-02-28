@@ -1,3 +1,4 @@
+import jwt as jwt
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -6,6 +7,7 @@ from rest_framework import status
 from .serializers import UserSerializer
 from .models import User
 from django.contrib.auth import authenticate, login, logout
+from django.conf import settings
 
 
 class MyInfo(APIView):
@@ -64,3 +66,26 @@ class Logout(APIView):
     def post(self, request):
         logout(request)
         return Response(status=status.HTTP_200_OK)
+
+
+class JWTLogin(APIView):
+    """jwt를 통한 로그인 처리"""
+
+    def post(self, request):
+        username = request.data.gate("username")
+        password = request.data.gate("password")
+
+        if not username or not password:
+            raise ParseError
+
+        user = authenticate(request, username=username, password=password)
+
+        # 토큰을 만드는 키
+        if user:
+            token = jwt.encode(
+                {"id": user.id, "username": user.username},
+                settings.SECRET_KEY,
+                algorithm="HS256",
+            )
+            print("token: " + token)
+            return Response({"token": token})
